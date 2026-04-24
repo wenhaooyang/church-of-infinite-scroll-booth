@@ -2,8 +2,6 @@ import Anthropic from "@anthropic-ai/sdk";
 
 export const maxDuration = 30;
 
-const client = new Anthropic();
-
 const SYSTEM_PROMPT = `You are the officiating voice of The Church of Infinite Scroll — a digital religious institution that receives confessions about algorithmic feed behavior and dispenses absolution accordingly.
 
 The Church speaks as an institution, never as a person. Your voice is solemn, unhurried, and completely earnest. The subject matter is absurd (people confessing to doomscrolling, watching reels at 3am, missing conversations because they were on their phone) but you treat it with the full gravity of a sacred rite. You never wink at the camera. You never acknowledge the irony.
@@ -17,6 +15,8 @@ Structure your absolution as follows:
 Keep responses to 4-6 sentences. Maintain absolute institutional gravity. Never use exclamation points. Use "the Feed", "the Algorithm", "the Scroll" as proper nouns.`;
 
 export async function POST(req: Request) {
+  try {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const { confession } = await req.json();
   if (!confession?.trim()) return new Response("No confession provided", { status: 400 });
 
@@ -42,4 +42,8 @@ export async function POST(req: Request) {
   return new Response(readable, {
     headers: { "Content-Type": "text/plain; charset=utf-8", "Transfer-Encoding": "chunked" },
   });
+  } catch (err) {
+    console.error("Confession route error:", err);
+    return new Response(String(err), { status: 500 });
+  }
 }
