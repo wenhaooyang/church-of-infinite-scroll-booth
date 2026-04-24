@@ -19,22 +19,28 @@ export async function POST(req: Request) {
     const { confession } = await req.json();
     if (!confession?.trim()) return new Response("No confession provided", { status: 400 });
 
-    const stream = await client.messages.stream({
+    const response = await client.messages.create({
       model: "claude-3-5-sonnet-20241022",
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: confession }],
+      stream: true,
     });
 
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
-        for await (const chunk of stream) {
-          if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
-            controller.enqueue(encoder.encode(chunk.delta.text));
+        try {
+          for await (const chunk of response) {
+            if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
+              controller.enqueue(encoder.encode(chunk.delta.text));
+            }
           }
+          controller.close();
+        } catch (err) {
+          console.error("Stream error:", err);
+          controller.error(err);
         }
-        controller.close();
       },
     });
 
