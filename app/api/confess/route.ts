@@ -1,5 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 
+export const maxDuration = 30;
+
 const client = new Anthropic();
 
 const SYSTEM_PROMPT = `You are the officiating voice of The Church of Infinite Scroll — a digital religious institution that receives confessions about algorithmic feed behavior and dispenses absolution accordingly.
