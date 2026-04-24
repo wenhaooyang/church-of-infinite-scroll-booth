@@ -15,29 +15,37 @@ Structure your absolution as follows:
 Keep responses to 4-6 sentences. Maintain absolute institutional gravity. Never use exclamation points. Use "the Feed", "the Algorithm", "the Scroll" as proper nouns.`;
 
 export async function POST(req: Request) {
-  const { confession } = await req.json();
-  if (!confession?.trim()) return new Response("No confession provided", { status: 400 });
+  try {
+    const { confession } = await req.json();
+    if (!confession?.trim()) return new Response("No confession provided", { status: 400 });
 
-  const stream = await client.messages.stream({
-    model: "claude-3-5-sonnet-20241022",
-    max_tokens: 1024,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: "user", content: confession }],
-  });
+    const stream = await client.messages.stream({
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: "user", content: confession }],
+    });
 
-  const encoder = new TextEncoder();
-  const readable = new ReadableStream({
-    async start(controller) {
-      for await (const chunk of stream) {
-        if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
-          controller.enqueue(encoder.encode(chunk.delta.text));
+    const encoder = new TextEncoder();
+    const readable = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of stream) {
+          if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
+            controller.enqueue(encoder.encode(chunk.delta.text));
+          }
         }
-      }
-      controller.close();
-    },
-  });
+        controller.close();
+      },
+    });
 
-  return new Response(readable, {
-    headers: { "Content-Type": "text/plain; charset=utf-8", "Transfer-Encoding": "chunked" },
-  });
+    return new Response(readable, {
+      headers: { "Content-Type": "text/plain; charset=utf-8", "Transfer-Encoding": "chunked" },
+    });
+  } catch (err: unknown) {
+    const status = (err as { status?: number }).status ?? 500;
+    const message = (err as { message?: string }).message ?? String(err);
+    const body = (err as { error?: unknown }).error;
+    console.error("Confession error:", status, message, JSON.stringify(body));
+    return new Response(`${status}: ${message}`, { status: 500 });
+  }
 }
