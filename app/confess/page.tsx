@@ -78,7 +78,7 @@ export default function ConfessPage() {
     <main style={S.main}>
       <div style={S.booth}>
         <div style={S.header}>
-          <a href="/" style={{ fontSize: 11, color: "#3a3a32", textDecoration: "none", letterSpacing: "0.1em" }}>← Parish</a>
+          <a href="https://church-of-infinite-scroll-landing.vercel.app" style={{ fontSize: 11, color: "#3a3a32", textDecoration: "none", letterSpacing: "0.1em" }}>← Parish</a>
           <span style={S.title}>The Confession Booth</span>
           <span style={S.status}><span style={S.dot} /> Booth Open</span>
         </div>
