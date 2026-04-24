@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   if (!confession?.trim()) return new Response("No confession provided", { status: 400 });
 
   const stream = await client.messages.stream({
-    model: "claude-sonnet-4-6",
+    model: "claude-3-5-sonnet-20241022",
     max_tokens: 1024,
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content: confession }],
