@@ -76,21 +76,21 @@ export default function ConfessPage() {
 
   return (
     <main style={S.main}>
-      <div style={S.booth}>
+      <div style={S.booth} className="booth-container">
         <div style={S.header}>
-          <a href="https://church-of-infinite-scroll-landing.vercel.app" style={{ fontSize: 11, color: "#3a3a32", textDecoration: "none", letterSpacing: "0.1em" }}>← Parish</a>
+          <a href="https://church-of-infinite-scroll-landing.vercel.app" style={{ fontSize: 11, color: "#3a3a32", textDecoration: "none", letterSpacing: "0.1em" }} className="booth-nav-link">← Parish</a>
           <span style={S.title}>The Confession Booth</span>
-          <span style={S.status}><span style={S.dot} /> Booth Open</span>
+          <span style={S.status} className="booth-status"><span style={S.dot} className="booth-dot" /> Booth Open</span>
         </div>
         <div ref={feedRef} style={S.feed}>
           {messages.map(msg => (
             <div key={msg.id} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase" }} className="booth-meta-row">
                 <span style={metaColor(msg.role)}>{msg.role === "penitent" ? "Penitent" : msg.role === "church" ? "The Church" : "System"}</span>
                 <span style={{ color: "#2e2e28" }}>{msg.time}</span>
                 <div style={S.metaLine} />
               </div>
-              <div style={bodyStyle(msg.role)}>
+              <div style={bodyStyle(msg.role)} className={`booth-msg-body booth-msg-${msg.role}`}>
                 {msg.role === "penitent" && <span style={{ color: "#3a3a32" }}>&gt; </span>}
                 {msg.text}
                 {msg.role === "church" && loading && msg.text === "" && <span style={{ color: "#383830", fontStyle: "italic" }}>The Church deliberates…</span>}
@@ -100,12 +100,12 @@ export default function ConfessPage() {
           ))}
         </div>
         <div style={S.inputArea}>
-          <div style={S.label}>Confess your scroll sins</div>
+          <div style={S.label} className="booth-label">Confess your scroll sins</div>
           <div style={S.inputRow}>
-            <textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }} placeholder="Bless me, Algorithm, for I have scrolled..." rows={3} style={S.textarea} disabled={loading} />
-            <button onClick={submit} disabled={loading || !input.trim()} style={{ ...S.btn, opacity: loading || !input.trim() ? 0.4 : 1 }}>{loading ? "Receiving…" : "Confess"}</button>
+            <textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }} placeholder="Bless me, Algorithm, for I have scrolled..." rows={3} style={S.textarea} className="confession-input" disabled={loading} />
+            <button onClick={submit} disabled={loading || !input.trim()} style={{ ...S.btn, opacity: loading || !input.trim() ? 0.4 : 1 }} className="booth-confess-btn">{loading ? "Receiving…" : "Confess"}</button>
           </div>
-          <div style={S.footer}>All confessions are received in the presence of the Feed</div>
+          <div style={S.footer} className="booth-footer">All confessions are received in the presence of the Feed</div>
         </div>
       </div>
     </main>

@@ -4,3 +4,42 @@ body { background: #080808; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+/* ── Booth container width (all screens) ── */
+.booth-container { max-width: 820px !important; }
+
+/* ── Desktop: font sizes + brightness ── */
+@media (min-width: 768px) {
+
+  /* Font sizes */
+  .booth-msg-body    { font-size: 15px !important; }
+  .booth-meta-row    { font-size: 11px !important; }
+  .booth-nav-link    { font-size: 13px !important; }
+  .booth-status      { font-size: 13px !important; }
+  .booth-label       { font-size: 11px !important; }
+  .confession-input  { font-size: 14px !important; }
+  .booth-footer      { font-size: 11px !important; }
+
+  /* Message text brightness (+35%) */
+  .booth-msg-penitent { color: #b8b8b2 !important; }
+  .booth-msg-church   { color: #d4c88e !important; border-left-color: #ddb969 !important; }
+  .booth-msg-system   { color: #94948e !important; }
+
+  /* Gold accent brightness (+20%) */
+  .booth-confess-btn  { background: #ddb969 !important; }
+
+  /* Nav link brightness */
+  .booth-nav-link     { color: #7a7a72 !important; }
+
+  /* Green status — more vivid */
+  .booth-status       { color: #68a868 !important; }
+  .booth-dot          { background: #52b852 !important; }
+
+  /* Labels + footer — more visible */
+  .booth-label        { color: #585850 !important; }
+  .booth-footer       { color: #484840 !important; }
+
+  /* Input text + placeholder */
+  .confession-input   { color: #d8d8d0 !important; }
+  .confession-input::placeholder { color: #585850 !important; opacity: 1; }
+}
